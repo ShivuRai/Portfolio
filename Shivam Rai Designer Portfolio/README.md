@@ -1,2 +1,2 @@
-#### Hola
-#### Portfolio via Niranjan, I welcome you and hope u will like the code 
+#### Hola Amigo,
+#### Myself Shivam, hope you will like my portfolio
