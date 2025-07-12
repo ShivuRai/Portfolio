@@ -13,542 +13,389 @@
 
     <style>
         :root {
-            --space-black-blue: #020c1b;
-            --dark-navy: #0a192f;
-            --mid-navy: #112240;
-            --lightest-navy: #233554;
-            --slate: #8892b0;
-            --light-slate: #a8b2d1;
-            --lightest-slate: #ccd6f6;
-            --white: #e6f1ff;
-            --accent: #64ffda;
-            --accent-tint: rgba(100, 255, 218, 0.1);
-            --accent-purple: #d6b3ff;
-            --font-sans: 'Inter', sans-serif;
-            --font-design: 'Space Grotesk', sans-serif;
-            --border-radius: 8px;
-            --nav-height: 100px;
-            --transition-fast: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
+    --space-black-blue: #020c1b;
+    --dark-navy: #0a192f;
+    --mid-navy: #112240;
+    --lightest-navy: #233554;
+    --slate: #8892b0;
+    --light-slate: #a8b2d1;
+    --lightest-slate: #ccd6f6;
+    --white: #e6f1ff;
+    --accent: rgb(70, 172, 250);
+    --accent-tint: rgba(79, 141, 250, 0.1);
+    --accent-purple: #d6b3ff;
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --font-design: 'Space Grotesk', sans-serif;
+    --border-radius: 8px;
+    --nav-height: 100px;
+    --transition-fast: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        html { 
-            scroll-behavior: smooth; 
-            scrollbar-width: thin;
-            scrollbar-color: var(--slate) transparent;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: var(--font-sans);
-            color: var(--slate);
-            -webkit-font-smoothing: antialiased;
-            background-color: var(--space-black-blue);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+html { 
+    scroll-behavior: smooth; 
+    scrollbar-width: thin;
+    scrollbar-color: var(--slate) transparent;
+}
 
-        .background-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-        }
-        .aurora-background {
-            background-image: radial-gradient(at 47% 33%, hsl(209.79, 89%, 15%) 0, transparent 59%), 
-                              radial-gradient(at 82% 65%, hsl(211.33, 93%, 20%) 0, transparent 55%);
-            width: 100%; height: 100%;
-        }
+body {
+    font-family: var(--font-sans);
+    color: var(--slate);
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--space-black-blue);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
 
-        .skip-to-content {
-            position: absolute; top: auto; left: -999px; width: 1px; height: 1px; overflow: hidden; z-index: -999;
-            padding: 1rem; background-color: var(--accent); color: var(--dark-navy); border-radius: var(--border-radius); font-weight: 700;
-        }
-        .skip-to-content:focus { top: 1rem; left: 1rem; width: auto; height: auto; overflow: auto; z-index: 10000; }
+.background-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+}
+.aurora-background {
+    background-image: radial-gradient(at 47% 33%, hsl(209.79, 89%, 15%) 0, transparent 59%), 
+                      radial-gradient(at 82% 65%, hsl(211.33, 93%, 20%) 0, transparent 55%);
+    width: 100%; height: 100%;
+}
 
-        main { padding: 0 150px; position: relative; }
-        section { padding: 60px 0; }
-        
-        section[id]::after {
-            content: '';
-            display: block;
-            width: 60%;
-            max-width: 400px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--lightest-navy), transparent);
-            margin: 100px auto 0 auto;
-        }
-        #contact::after {
-            display: none;
-        }
+.skip-to-content {
+    position: absolute; top: auto; left: -999px; width: 1px; height: 1px; overflow: hidden; z-index: -999;
+    padding: 1rem; background-color: var(--accent); color: var(--dark-navy); border-radius: var(--border-radius); font-weight: 700;
+}
+.skip-to-content:focus { top: 1rem; left: 1rem; width: auto; height: auto; overflow: auto; z-index: 10000; }
 
-        h1, h2, h3, h4 { color: var(--lightest-slate); font-weight: 700; line-height: 1.2; }
-        p { margin-bottom: 1rem; max-width: 65ch; }
-        a { text-decoration: none; color: var(--light-slate); transition: var(--transition-fast); }
-        a:hover, button:hover { color: var(--accent); filter: brightness(1.2); }
+main { padding: 0 150px; position: relative; }
+section { padding: 60px 0; }
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; will-change: opacity, transform; }
-        .reveal.is-visible { opacity: 1; transform: translateY(0); }
-        
-        .main-nav { display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; right: 0; padding: 0 50px; height: var(--nav-height); background-color: transparent; z-index: 11; transition: var(--transition-slow); }
-        .main-nav.scrolled { background-color: rgba(2, 12, 27, 0.85); backdrop-filter: blur(10px); height: 70px; box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7); }
-        .nav-logo a { color: var(--accent); font-weight: 800; font-size: 1.8rem; font-family: var(--font-design); letter-spacing: -0.5px; }
-        .nav-links ol { list-style: none; display: flex; align-items: center; }
-        .nav-links li { margin: 0 1.25rem; }
-        .nav-links li a:not(.btn) { color: var(--lightest-slate); padding: 0.75rem 0; font-size: 0.9rem; position: relative;}
-        .hamburger-menu { display: none; }
+section[id]::after {
+    content: '';
+    display: block;
+    width: 60%;
+    max-width: 400px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--lightest-navy), transparent);
+    margin: 100px auto 0 auto;
+}
+#contact::after {
+    display: none;
+}
 
-        #hero { display: flex; justify-content: center; flex-direction: column; min-height: 100vh; text-align: left; position: relative; }
-        #hero::after { display: none; }
-        #stars-container { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; }
-        .star { position: absolute; background-color: var(--white); border-radius: 50%; animation: move-stars linear infinite; }
-        
-        @keyframes move-stars { 
-            from { transform: translateY(-50px); opacity: 1; } 
-            to { transform: translate(var(--drift-x, 0), 100vh); opacity: 0.5; } 
-        }
+h1, h2, h3, h4 { color: var(--lightest-slate); font-weight: 700; line-height: 1.2; }
+p { margin-bottom: 1rem; max-width: 65ch; }
+a { text-decoration: none; color: var(--light-slate); transition: var(--transition-fast); }
+a:hover, button:hover { color: var(--accent); filter: brightness(1.2); }
 
-        #hero h1, #hero h2, #hero h3, #hero p, .hero-cta-container { opacity: 0; animation: fadeInSlideUp 0.8s forwards; }
-        #hero h1 { animation-delay: 100ms; }
-        #hero .big-heading { animation-delay: 200ms; }
-        #hero .sub-heading { animation-delay: 300ms; }
-        #hero p { animation-delay: 400ms; }
-        .hero-cta-container { animation-delay: 500ms; }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; will-change: opacity, transform; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-        @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.main-nav { display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; right: 0; padding: 0 50px; height: var(--nav-height); background-color: transparent; z-index: 11; transition: var(--transition-slow); }
+.main-nav.scrolled { background-color: rgba(2, 12, 27, 0.85); backdrop-filter: blur(10px); height: 70px; box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7); }
+.nav-logo a { color: var(--accent); font-weight: 800; font-size: 1.8rem; font-family: var(--font-mono); }
+.nav-links ol { list-style: none; display: flex; align-items: center; }
+.nav-links li { margin: 0 1.25rem; }
+.nav-links li a:not(.btn) { color: var(--lightest-slate); padding: 0.75rem 0; font-size: 0.9rem; position: relative;}
+.hamburger-menu { display: none; }
 
-        #hero h1 { margin: 0 0 1.5rem 0.25rem; color: var(--accent); font-family: var(--font-design); font-size: clamp(1rem, 2vw, 1.1rem); font-weight: 400; }
-        #hero .big-heading { font-family: var(--font-design); font-size: clamp(40px, 8vw, 80px); font-weight: 800; color: var(--white); text-shadow: 0 0 30px rgba(100, 255, 218, 0.4); letter-spacing: -1px; }
-        #hero .sub-heading { font-family: var(--font-design); font-size: clamp(35px, 7vw, 70px); color: var(--slate); font-weight: 700; letter-spacing: -0.5px; }
-        #hero p { max-width: 580px; margin-top: 1.5rem; }
-        .hero-cta-container { margin-top: 3rem; }
+#hero { display: flex; justify-content: center; flex-direction: column; min-height: 100vh; text-align: left; position: relative; }
+#hero::after { display: none; }
+#stars-container { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; }
+.star { position: absolute; background-color: var(--white); border-radius: 50%; animation: move-stars linear infinite; }
 
-        .btn { color: var(--accent); background-color: transparent; border: 1px solid var(--accent); border-radius: var(--border-radius); padding: 0.75rem 1.75rem; font-size: 0.9rem; font-family: var(--font-sans); cursor: pointer; transition: var(--transition-fast); line-height: 1; }
-        .btn:hover { background-color: var(--accent-tint); transform: translateY(-3px); box-shadow: 0 5px 15px -5px var(--accent-tint); }
-        .btn a.special-link { color: var(--accent) !important; }
-        a.special-link:hover { color: var(--accent) !important; }
-        .btn-large { padding: 1.25rem 2rem; }
-        
-        h2.section-heading { display: flex; align-items: center; margin-bottom: 3rem; font-size: clamp(26px, 5vw, 32px); color: var(--white); width: 100%; font-family: var(--font-design); }
-        h2.section-heading::after { content: ''; display: block; position: relative; flex-grow: 1; height: 1px; margin-left: 1.5rem; background-color: var(--lightest-navy); transform: scaleX(0); transform-origin: left; transition: transform 0.8s ease-out; }
-        h2.section-heading.is-visible::after { transform: scaleX(1); }
+@keyframes move-stars { 
+    from { transform: translateY(-50px); opacity: 1; } 
+    to { transform: translate(var(--drift-x, 0), 100vh); opacity: 0.5; } 
+}
 
-        .about-container { display: flex; gap: 50px; align-items: flex-start; }
-        .about-left { flex: 0 0 250px; text-align: left; }
-        .about-image-wrapper { max-width: 250px; margin-bottom: 1.5rem; position: relative; border-radius: var(--border-radius); }
-        .about-image-wrapper img { width: 100%; height: auto; object-fit: cover; border-radius: var(--border-radius); border: 2px solid var(--lightest-navy); }
-        .about-name { font-size: 1.8rem; color: var(--white); margin-bottom: 0.5rem; }
-        .about-title { font-family: var(--font-sans); font-size: 1rem; color: var(--accent); margin-bottom: 0; }
-        .contact-info { margin-top: 2rem; }
-        .contact-info ul { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
-        .contact-info li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 0.75rem; color: var(--slate); }
-        .contact-info i { color: var(--accent); margin-top: 3px; }
+#hero h1, #hero h2, #hero h3, #hero p, .hero-cta-container { opacity: 0; animation: fadeInSlideUp 0.8s forwards; }
+#hero h1 { animation-delay: 100ms; }
+#hero .big-heading { animation-delay: 200ms; }
+#hero .sub-heading { animation-delay: 300ms; }
+#hero p { animation-delay: 400ms; }
+.hero-cta-container { animation-delay: 500ms; }
 
-        .about-right { flex: 1; }
-        .about-right .bio { margin-bottom: 2.5rem; }
-        
-        .about-details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .about-details-grid h3 { color: var(--lightest-slate); font-size: 1.4rem; margin-bottom: 1.5rem; }
-        .about-details-grid .grid-column h3:first-child { margin-top: 0; }
-        
-        ul.core-skills-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-        ul.core-skills-list li { position: relative; padding-left: 1.5rem; font-family: var(--font-sans); font-size: 0.9rem; color: var(--light-slate); margin-bottom: 0.5rem; }
-        ul.core-skills-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
-        
-        .software-skills-list { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; list-style: none; margin-top: 1.5rem; padding: 0; }
-        .software-skills-list li { transition: var(--transition-fast); }
-        .software-skills-list li:hover { transform: translateY(-3px); }
-        .software-skills-list img { width: 40px; height: 40px; }
+@keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .timeline { position: relative; }
-        .timeline::after { content: ''; position: absolute; width: 2px; background-color: var(--lightest-navy); top: 0.5rem; bottom: 0; left: 7px; z-index: 1; }
-        .timeline-item { padding: 0 0 2.5rem 30px; position: relative; z-index: 2; }
-        .timeline-item:last-child { padding-bottom: 0; }
-        .timeline-item::before { content: ''; height: 15px; width: 15px; position: absolute; top: 0.5rem; left: 7px; transform: translateX(-50%); background-color: var(--accent); border-radius: 50%; z-index: 2;}
-        .timeline-content h4 { font-size: 1.1rem; margin-bottom: 0.25rem; font-weight: 600; }
-        .timeline-content p { color: var(--light-slate); margin: 0; }
-        .timeline-date { font-family: var(--font-sans); color: var(--slate); font-size: 0.8rem; margin-bottom: 0.5rem; }
-        
-        .project-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-        .project-filters button { font-family: var(--font-sans); font-size: 0.85rem; background-color: transparent; color: var(--light-slate); border: 1px solid var(--lightest-navy); border-radius: 20px; padding: 0.5rem 1rem; cursor: pointer; transition: var(--transition-fast); }
-        .project-filters button:hover { background-color: var(--accent-tint); color: var(--accent); border-color: var(--accent);}
-        .project-filters button.active { background-color: var(--accent); color: var(--dark-navy); border-color: var(--accent); }
-        
-        .projects-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-        
-        .spotlight-card {
-            background: linear-gradient(135deg, rgba(23, 37, 64, 0.5), rgba(10, 25, 47, 0.5));
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: var(--border-radius);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            position: relative; overflow: hidden; border: 1px solid var(--lightest-navy);
-        }
-        
-        .spotlight-card.hidden { transform: scale(0.95); opacity: 0; pointer-events: none; }
-        .spotlight-card:not(.hidden) { transform: scale(1); opacity: 1; }
-        .spotlight-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(2, 12, 27, 0.7); border-color: var(--accent); }
-        .spotlight-card::before { content: ""; position: absolute; top: var(--y, 50%); left: var(--x, 50%); transform: translate(-50%, -50%); width: 0; height: 0; background: radial-gradient(circle closest-side, var(--accent-tint), transparent); opacity: 0; transition: width 0.3s ease, height 0.3s ease, opacity: 0.3s ease; }
-        .spotlight-card:hover::before { width: 300px; height: 300px; opacity: 1; }
+#hero h1 { margin: 0 0 1.5rem 0.25rem; color: var(--accent); font-family: var(--font-mono); font-size: clamp(1rem, 2vw, 1.1rem); font-weight: 400; }
+#hero .big-heading { font-family: var(--font-design); font-size: clamp(40px, 8vw, 80px); font-weight: 800; color: var(--white); text-shadow: 0 0 30px rgba(100, 255, 218, 0.4); letter-spacing: -1px; }
+#hero .sub-heading { font-family: var(--font-design); font-size: clamp(35px, 7vw, 70px); color: var(--slate); font-weight: 700; letter-spacing: -0.5px; }
+#hero p { max-width: 580px; margin-top: 1.5rem; }
+.hero-cta-container { margin-top: 3rem; }
 
-        .card-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
-        .project-image { width: 100%; height: 180px; object-fit: cover; }
-        .card-inner { padding: 1.75rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .project-title, .cert-title { font-size: 1.3rem; margin-bottom: 0.75rem; font-family: var(--font-design); }
-        .project-title a:hover { color: var(--accent); }
-        .project-description { color: var(--light-slate); flex-grow: 1; font-size: 1rem; }
-        .project-tech-list { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; font-family: var(--font-sans); font-size: 0.8rem; margin-top: 1.5rem; color: var(--slate); }
-        
-        .project-link-wrapper { margin-top: 1.5rem; }
-        .project-view-link { color: var(--lightest-slate); font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .project-view-link .arrow-icon { display: inline-block; transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
-        .project-view-link:hover { color: var(--accent); }
-        .project-view-link:hover .arrow-icon { transform: translateX(5px); }
-        
-        .projects-footer { text-align: center; margin-top: 4rem; }
-        .certs-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-        .cert-inner { text-align: center; justify-content: space-between; }
-        .cert-issuer { font-size: 0.8rem; color: var(--slate); margin: 5px 0 15px; }
-        .cert-link { display: inline-block; font-family: var(--font-sans); font-size: 0.8rem; }
-        .cert-link i { margin-left: 5px; }
-        
-        .design-process { display: flex; justify-content: space-between; margin-top: 3rem; gap: 20px; }
-        .process-step { flex: 1; text-align: center; padding: 1.5rem; background: rgba(23, 37, 64, 0.3); border-radius: var(--border-radius); }
-        .process-step i { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
-        .process-step h4 { font-family: var(--font-design); margin-bottom: 0.5rem; }
-        
-        #contact { text-align: center; max-width: 650px; margin: 0 auto; }
-        #contact .title { font-size: clamp(40px, 5vw, 60px); color: var(--white); font-family: var(--font-design); }
-        #contact p { margin-left: auto; margin-right: auto; }
-        .contact-cta-container { margin-top: 3rem; }
+.btn { color: var(--accent); background-color: transparent; border: 1px solid var(--accent); border-radius: var(--border-radius); padding: 0.75rem 1.75rem; font-size: 0.9rem; font-family: var(--font-mono); cursor: pointer; transition: var(--transition-fast); line-height: 1; }
+.btn:hover { background-color: var(--accent-tint); transform: translateY(-3px); box-shadow: 0 5px 15px -5px var(--accent-tint); }
+.btn a.special-link { color: var(--accent) !important; }
+a.special-link:hover { color: var(--accent) !important; }
+.btn-large { padding: 1.25rem 2rem; }
 
-        .footer { text-align: center; padding: 1.5rem; font-family: var(--font-sans); font-size: 0.8rem; color: var(--slate); }
-        .social-links { list-style: none; display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
-        
-        @media (min-width: 769px) {
-            .nav-links li a:not(.btn)::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 2px;
-                background-color: var(--accent);
-                transform: scaleX(0);
-                transform-origin: bottom right;
-                transition: transform 0.25s ease-out;
-            }
-            .nav-links li a:not(.btn):hover::after,
-            .nav-links li a:not(.btn).active::after {
-                transform: scaleX(1);
-                transform-origin: bottom left;
-            }
-        }
-        
-        @media (max-width: 1080px) { 
-            main { padding: 0 100px; } 
-            .about-details-grid { grid-template-columns: 1fr 1fr; }
-            .about-details-grid .grid-column:nth-child(3) { grid-column: 1 / span 2; }
-        }
+h2.section-heading { display: flex; align-items: center; margin-bottom: 3rem; font-size: clamp(26px, 5vw, 32px); color: var(--white); width: 100%; font-family: var(--font-design); }
+h2.section-heading::after { content: ''; display: block; position: relative; flex-grow: 1; height: 1px; margin-left: 1.5rem; background-color: var(--lightest-navy); transform: scaleX(0); transform-origin: left; transition: transform 0.8s ease-out; }
+h2.section-heading.is-visible::after { transform: scaleX(1); }
 
-        @media (max-width: 768px) {
-            main { padding: 0 50px; }
-            section { padding: 100px 0; }
-            h2.section-heading::after { display: none; }
-            .about-container { flex-direction: column; align-items: center; }
-            .about-left { flex: 0 0 auto; width: 100%; max-width: 250px; margin-bottom: 2rem; text-align: center; }
-            .about-details-grid { grid-template-columns: 1fr; }
-            .about-details-grid .grid-column:nth-child(3) { grid-column: auto; }
-            .design-process { flex-direction: column; }
-            
-            .nav-links {
-                display: flex; position: fixed; top: 0; right: 0;
-                height: 100vh; width: min(75vw, 350px);
-                background-color: var(--mid-navy);
-                flex-direction: column; justify-content: center; align-items: center;
-                transform: translateX(100%);
-                transition: transform 0.3s ease-out;
-                z-index: 10;
-            }
-            .nav-links.active { transform: translateX(0); }
-            .nav-links ol { flex-direction: column; gap: 2rem; text-align: center;}
-            .nav-links li a.active { color: var(--accent); }
+.about-container { display: flex; gap: 50px; align-items: flex-start; }
+.about-left { flex: 0 0 250px; text-align: left; }
+.about-image-wrapper { max-width: 250px; margin-bottom: 1.5rem; position: relative; border-radius: var(--border-radius); }
+.about-image-wrapper img { width: 100%; height: auto; object-fit: cover; border-radius: var(--border-radius); border: 2px solid var(--lightest-navy); }
+.about-name { font-size: 1.8rem; color: var(--white); margin-bottom: 0.5rem; }
+.about-title { font-family: var(--font-mono); font-size: 1rem; color: var(--accent); margin-bottom: 0; }
+.contact-info { margin-top: 2rem; }
+.contact-info ul { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
+.contact-info li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 0.75rem; color: var(--slate); }
+.contact-info i { color: var(--accent); margin-top: 3px; }
 
-            .hamburger-menu {
-                display: flex; flex-direction: column; justify-content: space-around;
-                width: 30px; height: 25px;
-                background: transparent; border: none; cursor: pointer; padding: 0;
-                z-index: 12;
-            }
-            .hamburger-menu .bar {
-                height: 3px; width: 100%; background: var(--accent); transition: all 0.3s ease;
-            }
-            .hamburger-menu.active .bar:nth-child(1){ transform: translateY(11px) rotate(45deg); }
-            .hamburger-menu.active .bar:nth-child(2){ opacity: 0; }
-            .hamburger-menu.active .bar:nth-child(3){ transform: translateY(-11px) rotate(-45deg); }
-        }
-        @media (max-width: 600px) { main { padding: 0 25px; } }
-    </style>
+.about-right { flex: 1; }
+.about-right .bio { margin-bottom: 2.5rem; }
 
-    <style>
-        :root {
-            --space-black-blue: #020c1b;
-            --dark-navy: #0a192f;
-            --mid-navy: #112240;
-            --lightest-navy: #233554;
-            --slate: #8892b0;
-            --light-slate: #a8b2d1;
-            --lightest-slate: #ccd6f6;
-            --white: #e6f1ff;
-            --accent: #649aff;
-            --accent-tint: rgba(100, 255, 218, 0.1);
-            --font-sans: 'Inter', sans-serif;
-            --font-mono: 'SF Mono', 'Fira Code', monospace;
-            --border-radius: 4px;
-            --nav-height: 100px;
-            --transition-fast: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
+.about-details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.about-details-grid h3 { color: var(--lightest-slate); font-size: 1.4rem; margin-bottom: 1.5rem; }
+.about-details-grid .grid-column h3:first-child { margin-top: 0; }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        html { 
-            scroll-behavior: smooth; 
-            scrollbar-width: thin;
-            scrollbar-color: var(--slate) transparent;
-        }
+ul.core-skills-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+ul.core-skills-list li { position: relative; padding-left: 1.5rem; font-family: var(--font-mono); font-size: 0.9rem; color: var(--light-slate); margin-bottom: 0.5rem; }
+ul.core-skills-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
 
-        body {
-            font-family: var(--font-sans);
-            color: var(--slate);
-            -webkit-font-smoothing: antialiased;
-            background-color: var(--space-black-blue);
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+.software-skills-list { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; list-style: none; margin-top: 1.5rem; padding: 0; }
+.software-skills-list li { transition: var(--transition-fast); }
+.software-skills-list li:hover { transform: translateY(-3px); }
+.software-skills-list img { width: 40px; height: 40px; }
 
-        .background-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-        }
-        .aurora-background {
-            background-image: radial-gradient(at 47% 33%, hsl(209.79, 89%, 15%) 0, transparent 59%), 
-                              radial-gradient(at 82% 65%, hsl(211.33, 93%, 20%) 0, transparent 55%);
-            width: 100%; height: 100%;
-        }
+.timeline { position: relative; }
+.timeline::after { content: ''; position: absolute; width: 2px; background-color: var(--lightest-navy); top: 0.5rem; bottom: 0; left: 7px; z-index: 1; }
+.timeline-item { padding: 0 0 2.5rem 30px; position: relative; z-index: 2; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before { content: ''; height: 15px; width: 15px; position: absolute; top: 0.5rem; left: 7px; transform: translateX(-50%); background-color: var(--accent); border-radius: 50%; z-index: 2;}
+.timeline-content h4 { font-size: 1.1rem; margin-bottom: 0.25rem; font-weight: 600; }
+.timeline-content p { color: var(--light-slate); margin: 0; }
+.timeline-date { font-family: var(--font-mono); color: var(--slate); font-size: 0.8rem; margin-bottom: 0.5rem; }
 
-        .skip-to-content {
-            position: absolute; top: auto; left: -999px; width: 1px; height: 1px; overflow: hidden; z-index: -999;
-            padding: 1rem; background-color: var(--accent); color: var(--dark-navy); border-radius: var(--border-radius); font-weight: 700;
-        }
-        .skip-to-content:focus { top: 1rem; left: 1rem; width: auto; height: auto; overflow: auto; z-index: 10000; }
+.project-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+.project-filters button { font-family: var(--font-mono); font-size: 0.85rem; background-color: transparent; color: var(--light-slate); border: 1px solid var(--lightest-navy); border-radius: 20px; padding: 0.5rem 1rem; cursor: pointer; transition: var(--transition-fast); }
+.project-filters button:hover { background-color: var(--accent-tint); color: var(--accent); border-color: var(--accent);}
+.project-filters button.active { background-color: var(--accent); color: var(--dark-navy); border-color: var(--accent); }
 
-        main { padding: 0 150px; position: relative; }
-        section { padding: 60px 0; }
-        
-        section[id]::after {
-            content: '';
-            display: block;
-            width: 60%;
-            max-width: 400px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--lightest-navy), transparent);
-            margin: 100px auto 0 auto;
-        }
-        #contact::after {
-            display: none;
-        }
+.projects-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
-        h1, h2, h3, h4 { color: var(--lightest-slate); font-weight: 700; line-height: 1.2; }
-        p { margin-bottom: 1rem; max-width: 65ch; }
-        a { text-decoration: none; color: var(--light-slate); transition: var(--transition-fast); }
-        a:hover, button:hover { color: var(--accent); filter: brightness(1.2); }
+.spotlight-card {
+    background: linear-gradient(135deg, rgba(23, 37, 64, 0.5), rgba(10, 25, 47, 0.5));
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: var(--border-radius);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    position: relative; overflow: hidden; border: 1px solid var(--lightest-navy);
+}
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; will-change: opacity, transform; }
-        .reveal.is-visible { opacity: 1; transform: translateY(0); }
-        
-        .main-nav { display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; right: 0; padding: 0 50px; height: var(--nav-height); background-color: transparent; z-index: 11; transition: var(--transition-slow); }
-        .main-nav.scrolled { background-color: rgba(2, 12, 27, 0.85); backdrop-filter: blur(10px); height: 70px; box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7); }
-        .nav-logo a { color: var(--accent); font-weight: 800; font-size: 1.8rem; font-family: var(--font-mono); }
-        .nav-links ol { list-style: none; display: flex; align-items: center; }
-        .nav-links li { margin: 0 1.25rem; }
-        .nav-links li a:not(.btn) { color: var(--lightest-slate); padding: 0.75rem 0; font-size: 0.9rem; position: relative;}
-        .hamburger-menu { display: none; }
+.spotlight-card.hidden { transform: scale(0.95); opacity: 0; pointer-events: none; }
+.spotlight-card:not(.hidden) { transform: scale(1); opacity: 1; }
+.spotlight-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(2, 12, 27, 0.7); border-color: var(--accent); }
+.spotlight-card::before { content: ""; position: absolute; top: var(--y, 50%); left: var(--x, 50%); transform: translate(-50%, -50%); width: 0; height: 0; background: radial-gradient(circle closest-side, var(--accent-tint), transparent); opacity: 0; transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease; }
+.spotlight-card:hover::before { width: 300px; height: 300px; opacity: 1; }
 
-        #hero { display: flex; justify-content: center; flex-direction: column; min-height: 100vh; text-align: left; position: relative; }
-        #hero::after { display: none; }
-        #stars-container { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; }
-        .star { position: absolute; background-color: var(--white); border-radius: 50%; animation: move-stars linear infinite; }
-        
-        @keyframes move-stars { 
-            from { transform: translateY(-50px); opacity: 1; } 
-            to { transform: translate(var(--drift-x, 0), 100vh); opacity: 0.5; } 
-        }
+.card-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+.project-image { width: 100%; height: 180px; object-fit: cover; }
+.card-inner { padding: 1.75rem; display: flex; flex-direction: column; flex-grow: 1; }
+.project-title, .cert-title { font-size: 1.3rem; margin-bottom: 0.75rem; font-family: var(--font-design); }
+.project-title a:hover { color: var(--accent); }
+.project-description { color: var(--light-slate); flex-grow: 1; font-size: 1rem; }
+.project-tech-list { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem; margin-top: 1.5rem; color: var(--slate); }
 
-        #hero h1, #hero h2, #hero h3, #hero p, .hero-cta-container { opacity: 0; animation: fadeInSlideUp 0.8s forwards; }
-        #hero h1 { animation-delay: 100ms; }
-        #hero .big-heading { animation-delay: 200ms; }
-        #hero .sub-heading { animation-delay: 300ms; }
-        #hero p { animation-delay: 400ms; }
-        .hero-cta-container { animation-delay: 500ms; }
+.project-link-wrapper { margin-top: 1.5rem; }
+.project-view-link { color: var(--lightest-slate); font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
+.project-view-link .arrow-icon { display: inline-block; transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
+.project-view-link:hover { color: var(--accent); }
+.project-view-link:hover .arrow-icon { transform: translateX(5px); }
 
-        @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.projects-footer { text-align: center; margin-top: 4rem; }
+.certs-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.cert-inner { text-align: center; justify-content: space-between; }
+.cert-issuer { font-size: 0.8rem; color: var(--slate); margin: 5px 0 15px; }
+.cert-link { display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; }
+.cert-link i { margin-left: 5px; }
 
-        #hero h1 { margin: 0 0 1.5rem 0.25rem; color: var(--accent); font-family: var(--font-mono); font-size: clamp(1rem, 2vw, 1.1rem); font-weight: 400; }
-        #hero .big-heading { font-size: clamp(40px, 8vw, 80px); font-weight: 800; color: var(--white); text-shadow: 0 0 30px rgba(100, 255, 218, 0.4); }
-        #hero .sub-heading { font-size: clamp(35px, 7vw, 70px); color: var(--slate); font-weight: 700; }
-        #hero p { max-width: 580px; margin-top: 1.5rem; }
-        .hero-cta-container { margin-top: 3rem; }
+.design-process { display: flex; justify-content: space-between; margin-top: 3rem; gap: 20px; }
+.process-step { flex: 1; text-align: center; padding: 1.5rem; background: rgba(23, 37, 64, 0.3); border-radius: var(--border-radius); }
+.process-step i { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
+.process-step h4 { font-family: var(--font-design); margin-bottom: 0.5rem; }
 
-        .btn { color: var(--accent); background-color: transparent; border: 1px solid var(--accent); border-radius: var(--border-radius); padding: 0.75rem 1.75rem; font-size: 0.9rem; font-family: var(--font-mono); cursor: pointer; transition: var(--transition-fast); line-height: 1; }
-        .btn:hover { background-color: var(--accent-tint); transform: translateY(-3px); box-shadow: 0 5px 15px -5px var(--accent-tint); }
-        .btn a.special-link { color: var(--accent) !important; }
-        a.special-link:hover { color: var(--accent) !important; }
-        .btn-large { padding: 1.25rem 2rem; }
-        
-        h2.section-heading { display: flex; align-items: center; margin-bottom: 3rem; font-size: clamp(26px, 5vw, 32px); color: var(--white); width: 100%; }
-        h2.section-heading::after { content: ''; display: block; position: relative; flex-grow: 1; height: 1px; margin-left: 1.5rem; background-color: var(--lightest-navy); transform: scaleX(0); transform-origin: left; transition: transform 0.8s ease-out; }
-        h2.section-heading.is-visible::after { transform: scaleX(1); }
+#contact { text-align: center; max-width: 650px; margin: 0 auto; }
+#contact .title { font-size: clamp(40px, 5vw, 60px); color: var(--white); font-family: var(--font-design); }
+#contact p { margin-left: auto; margin-right: auto; }
+.contact-cta-container { margin-top: 3rem; }
 
-        .about-container { display: flex; gap: 50px; align-items: flex-start; }
-        .about-left { flex: 0 0 250px; text-align: left; }
-        .about-image-wrapper { max-width: 250px; margin-bottom: 1.5rem; position: relative; border-radius: var(--border-radius); }
-        .about-image-wrapper img { width: 100%; height: auto; object-fit: cover; border-radius: var(--border-radius); border: 2px solid var(--lightest-navy); }
-        .about-name { font-size: 1.8rem; color: var(--white); margin-bottom: 0.5rem; }
-        .about-title { font-family: var(--font-mono); font-size: 1rem; color: var(--accent); margin-bottom: 0; }
-        .contact-info { margin-top: 2rem; }
-        .contact-info ul { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
-        .contact-info li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 0.75rem; color: var(--slate); }
-        .contact-info i { color: var(--accent); margin-top: 3px; }
+.footer { text-align: center; padding: 1.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--slate); }
+.social-links { list-style: none; display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
 
-        .about-right { flex: 1; }
-        .about-right .bio { margin-bottom: 2.5rem; }
-        
-        .about-details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .about-details-grid h3 { color: var(--lightest-slate); font-size: 1.4rem; margin-bottom: 1.5rem; }
-        .about-details-grid .grid-column h3:first-child { margin-top: 0; }
-        
-        ul.core-skills-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-        ul.core-skills-list li { position: relative; padding-left: 1.5rem; font-family: var(--font-mono); font-size: 0.9rem; color: var(--light-slate); margin-bottom: 0.5rem; }
-        ul.core-skills-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
-        
-        .software-skills-list { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; list-style: none; margin-top: 1.5rem; padding: 0; }
-        .software-skills-list li { transition: var(--transition-fast); }
-        .software-skills-list li:hover { transform: translateY(-3px); }
-        .software-skills-list img { width: 40px; height: 40px; }
+@media (min-width: 769px) {
+    .nav-links li a:not(.btn)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--accent);
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.25s ease-out;
+    }
+    .nav-links li a:not(.btn):hover::after,
+    .nav-links li a:not(.btn).active::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+}
 
-        .timeline { position: relative; }
-        .timeline::after { content: ''; position: absolute; width: 2px; background-color: var(--lightest-navy); top: 0.5rem; bottom: 0; left: 7px; z-index: 1; }
-        .timeline-item { padding: 0 0 2.5rem 30px; position: relative; z-index: 2; }
-        .timeline-item:last-child { padding-bottom: 0; }
-        .timeline-item::before { content: ''; height: 15px; width: 15px; position: absolute; top: 0.5rem; left: 7px; transform: translateX(-50%); background-color: var(--accent); border-radius: 50%; z-index: 2;}
-        .timeline-content h4 { font-size: 1.1rem; margin-bottom: 0.25rem; font-weight: 600; }
-        .timeline-content p { color: var(--light-slate); margin: 0; }
-        .timeline-date { font-family: var(--font-mono); color: var(--slate); font-size: 0.8rem; margin-bottom: 0.5rem; }
-        
-        .project-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-        .project-filters button { font-family: var(--font-mono); font-size: 0.85rem; background-color: transparent; color: var(--light-slate); border: 1px solid var(--lightest-navy); border-radius: 20px; padding: 0.5rem 1rem; cursor: pointer; transition: var(--transition-fast); }
-        .project-filters button:hover { background-color: var(--accent-tint); color: var(--accent); border-color: var(--accent);}
-        .project-filters button.active { background-color: var(--accent); color: var(--dark-navy); border-color: var(--accent); }
-        
-        .projects-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-        
-        .spotlight-card {
-            background: linear-gradient(135deg, rgba(23, 37, 64, 0.5), rgba(10, 25, 47, 0.5));
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: var(--border-radius);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            position: relative; overflow: hidden; border: 1px solid var(--lightest-navy);
-        }
-        
-        .spotlight-card.hidden { transform: scale(0.95); opacity: 0; pointer-events: none; }
-        .spotlight-card:not(.hidden) { transform: scale(1); opacity: 1; }
-        .spotlight-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(2, 12, 27, 0.7); border-color: var(--accent); }
-        .spotlight-card::before { content: ""; position: absolute; top: var(--y, 50%); left: var(--x, 50%); transform: translate(-50%, -50%); width: 0; height: 0; background: radial-gradient(circle closest-side, var(--accent-tint), transparent); opacity: 0; transition: width 0.3s ease, height 0.3s ease, opacity: 0.3s ease; }
-        .spotlight-card:hover::before { width: 300px; height: 300px; opacity: 1; }
+@media (max-width: 1080px) { 
+    main { padding: 0 100px; } 
+    .about-details-grid { grid-template-columns: 1fr 1fr; }
+    .about-details-grid .grid-column:nth-child(3) { grid-column: 1 / span 2; }
+}
 
-        .card-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
-        .project-image { width: 100%; height: 180px; object-fit: cover; }
-        .card-inner { padding: 1.75rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .project-title, .cert-title { font-size: 1.3rem; margin-bottom: 0.75rem; }
-        .project-title a:hover { color: var(--accent); }
-        .project-description { color: var(--light-slate); flex-grow: 1; font-size: 1rem; }
-        .project-tech-list { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem; margin-top: 1.5rem; color: var(--slate); }
-        
-        .project-link-wrapper { margin-top: 1.5rem; }
-        .project-view-link { color: var(--lightest-slate); font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .project-view-link .arrow-icon { display: inline-block; transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
-        .project-view-link:hover { color: var(--accent); }
-        .project-view-link:hover .arrow-icon { transform: translateX(5px); }
-        
-        .projects-footer { text-align: center; margin-top: 4rem; }
-        .certs-grid { list-style: none; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-        .cert-inner { text-align: center; justify-content: space-between; }
-        .cert-issuer { font-size: 0.8rem; color: var(--slate); margin: 5px 0 15px; }
-        .cert-link { display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; }
-        .cert-link i { margin-left: 5px; }
-        
-        #contact { text-align: center; max-width: 650px; margin: 0 auto; }
-        #contact .title { font-size: clamp(40px, 5vw, 60px); color: var(--white); }
-        #contact p { margin-left: auto; margin-right: auto; }
-        .contact-cta-container { margin-top: 3rem; }
+@media (max-width: 768px) {
+    main { padding: 0 50px; }
+    section { padding: 100px 0; }
+    h2.section-heading::after { display: none; }
+    .about-container { flex-direction: column; align-items: center; }
+    .about-left { flex: 0 0 auto; width: 100%; max-width: 250px; margin-bottom: 2rem; text-align: center; }
+    .about-details-grid { grid-template-columns: 1fr; }
+    .about-details-grid .grid-column:nth-child(3) { grid-column: auto; }
+    .design-process { flex-direction: column; }
+    
+    .nav-links {
+        display: flex; position: fixed; top: 0; right: 0;
+        height: 100vh; width: min(75vw, 350px);
+        background-color: var(--mid-navy);
+        flex-direction: column; justify-content: center; align-items: center;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-out;
+        z-index: 10;
+    }
+    .nav-links.active { transform: translateX(0); }
+    .nav-links ol { flex-direction: column; gap: 2rem; text-align: center;}
+    .nav-links li a.active { color: var(--accent); }
 
-        .footer { text-align: center; padding: 1.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--slate); }
-        .social-links { list-style: none; display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
-        
-        @media (min-width: 769px) {
-            .nav-links li a:not(.btn)::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 2px;
-                background-color: var(--accent);
-                transform: scaleX(0);
-                transform-origin: bottom right;
-                transition: transform 0.25s ease-out;
-            }
-            .nav-links li a:not(.btn):hover::after,
-            .nav-links li a:not(.btn).active::after {
-                transform: scaleX(1);
-                transform-origin: bottom left;
-            }
-        }
-        
-        @media (max-width: 1080px) { 
-            main { padding: 0 100px; } 
-            .about-details-grid { grid-template-columns: 1fr 1fr; }
-            .about-details-grid .grid-column:nth-child(3) { grid-column: 1 / span 2; }
-        }
+    .hamburger-menu {
+        display: flex; flex-direction: column; justify-content: space-around;
+        width: 30px; height: 25px;
+        background: transparent; border: none; cursor: pointer; padding: 0;
+        z-index: 12;
+    }
+    .hamburger-menu .bar {
+        height: 3px; width: 100%; background: var(--accent); transition: all 0.3s ease;
+    }
+    .hamburger-menu.active .bar:nth-child(1){ transform: translateY(11px) rotate(45deg); }
+    .hamburger-menu.active .bar:nth-child(2){ opacity: 0; }
+    .hamburger-menu.active .bar:nth-child(3){ transform: translateY(-11px) rotate(-45deg); }
+}
+@media (max-width: 600px) { main { padding: 0 25px; } }
 
-        @media (max-width: 768px) {
-            main { padding: 0 50px; }
-            section { padding: 100px 0; }
-            h2.section-heading::after { display: none; }
-            .about-container { flex-direction: column; align-items: center; }
-            .about-left { flex: 0 0 auto; width: 100%; max-width: 250px; margin-bottom: 2rem; text-align: center; }
-            .about-details-grid { grid-template-columns: 1fr; }
-            .about-details-grid .grid-column:nth-child(3) { grid-column: auto; }
-            
-            .nav-links {
-                display: flex; position: fixed; top: 0; right: 0;
-                height: 100vh; width: min(75vw, 350px);
-                background-color: var(--mid-navy);
-                flex-direction: column; justify-content: center; align-items: center;
-                transform: translateX(100%);
-                transition: transform 0.3s ease-out;
-                z-index: 10;
-            }
-            .nav-links.active { transform: translateX(0); }
-            .nav-links ol { flex-direction: column; gap: 2rem; text-align: center;}
-            .nav-links li a.active { color: var(--accent); }
+/* Case Studies Section */
+#case-studies {
+  position: relative;
+}
 
-            .hamburger-menu {
-                display: flex; flex-direction: column; justify-content: space-around;
-                width: 30px; height: 25px;
-                background: transparent; border: none; cursor: pointer; padding: 0;
-                z-index: 12;
-            }
-            .hamburger-menu.active .bar:nth-child(1){ transform: translateY(11px) rotate(45deg); }
-            .hamburger-menu.active .bar:nth-child(2){ opacity: 0; }
-            .hamburger-menu.active .bar:nth-child(3){ transform: translateY(-11px) rotate(-45deg); }
-        }
-        @media (max-width: 600px) { main { padding: 0 25px; } }
+.case-studies-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.case-studies-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.case-study-card {
+  background: linear-gradient(135deg, rgba(23, 37, 64, 0.5), rgba(10, 25, 47, 0.5));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--lightest-navy);
+  transition: var(--transition-fast);
+  overflow: hidden;
+}
+
+.case-study-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -15px rgba(2, 12, 27, 0.7);
+  border-color: var(--accent);
+}
+
+.case-study-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.case-study-image {
+  height: 350px;
+  overflow: hidden;
+}
+
+.case-study-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.case-study-card:hover .case-study-image img {
+  transform: scale(1.05);
+}
+
+.case-study-details {
+  padding: 1.75rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.case-study-details h3 {
+  color: var(--white);
+  font-family: var(--font-design);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.case-study-description {
+  color: var(--light-slate);
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.case-study-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.case-study-tags span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  background-color: var(--accent-tint);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+}
+
+.case-study-link {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .case-studies-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .case-study-image {
+    height: 180px;
+  }
+}
+
+
     </style>
 </head>
 <body>
@@ -564,9 +411,10 @@
             <ol>
                 <li><a href="#about">About</a></li>
                 <li><a href="#projects">Projects</a></li>
+                 <li><a href="#case">Case Studies</a></li>
                 <li><a href="#certs">Certificates</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><a href="YOUR_RESUME_LINK.pdf" class="btn resume-btn" target="_blank"><span class="special-link">Resume</span></a></li>
+                <li><a href="LatestResume.pdf" class="btn resume-btn" target="_blank"><span class="special-link">Resume</span></a></li>
             </ol>
         </div>
     </nav>
@@ -590,29 +438,12 @@
                 <div class="about-right reveal" style="--delay: 200ms;"><p class="bio">I am a passionate UI/UX designer with a keen eye for detail and a user-centered approach. My journey began with a fascination for how digital interfaces shape human behavior, and I've since dedicated myself to creating experiences that are not only visually appealing but also intuitive and accessible.</p><div class="about-details-grid"><div class="grid-column"><h3>Education</h3><div class="timeline"><div class="timeline-item"><div class="timeline-content"><h4 class="timeline-date">2020 - 2023</h4><h4>Bachelor of Computer Applications (BCA)</h4><p>Graphic Era University, Dehradun </p></div></div><div class="timeline-item"><div class="timeline-content"><h4 class="timeline-date">2020</h4><h4>Senior Secondary (XII) </h4><p>Shri Guru Ram Rai Public School </p></div></div><div class="timeline-item"><div class="timeline-content"><h4 class="timeline-date">2018</h4><h4>Secondary (X)</h4><p>Oceanic International School</p></div></div></div></div><div class="grid-column"><h3>Experience</h3><div class="timeline"><div class="timeline-item"><div class="timeline-content"><h4 class="timeline-date">June 2024 - Present</h4><h4>Scholar Trainee</h4><p>Wipro Limited, Jaipur</p></div></div><div class="timeline-item"><div class="timeline-content"><h4 class="timeline-date">Feb 2023 - Present</h4><h4>Freelancer</h4><p></p></div></div></div></div>
                         <div class="grid-column"><h3>Core Skills</h3><ul class="core-skills-list"><li>User Research & Personas</li><li>Wireframing & Prototyping</li><li>Interaction Design</li><li>Information Architecture</li><li>UI Design & Visual Design</li><li>Usability Testing</li><li>Design Systems</li><li>Accessibility</li><li>Design Thinking</li></ul>
                             <h3 style="margin-top: 2.5rem;">Design Tools</h3>
-                            <!-- <ul class="software-skills-list">
-                               <li title="Jupyter Notebook"><img src="Icon/Jupiter.svg" alt="Jupyter Notebook Icon"></li>
-                                <li title="MySQL"><img src="Icon/MYSQL.svg" alt="MySQL Icon"></li>
-                                <li title="Numpy"><img src="Icon/Numpy.svg" alt="Numpy Icon"></li>
-                                <li title="Pandas"><img src="Icon/PAndas.svg" alt="Pandas Icon"></li>
-                                <li title="Power BI"><img src="Icon/Power Bi.svg" alt="Power BI Icon"></li>
-                                <li title="PowerPoint"><img src="Icon/Power-Point.svg" alt="PowerPoint Icon"></li>
-                                <li title="Python"><img src="Icon/Python.svg" alt="Python Icon"></li>
-                                <li title="Microsoft Word"><img src="Icon/Word.svg" alt="MS Word Icon"></li>
-                                <li title="Microsoft Excel"><img src="Icon/excel.svg" alt="MS Excel Icon"></li>
-                                <li title="Tableau"><img src="Icon/tableau.svg" alt="Tableau Icon"></li>
-                            </ul> -->
+                            
                             <!--
-                                <li title="Figma"><img src="Icon/Figma.svg" alt="Figma Icon"></li>
-                                <li title="Adobe XD"><img src="Icon/Adobe-XD.svg" alt="Adobe XD Icon"></li>
-                                <li title="Sketch"><img src="Icon/Sketch.svg" alt="Sketch Icon"></li>
-                                <li title="InVision"><img src="Icon/InVision.svg" alt="InVision Icon"></li>
+                                
                                 <li title="Axure RP"><img src="Icon/Axure-RP.svg" alt="Axure RP Icon"></li>
-                                <li title="Adobe Illustrator"><img src="Icon/Adobe-Illustrator.svg" alt="Adobe Illustrator Icon"></li>
-                                <li title="Adobe Photoshop"><img src="Icon/Adobe-Photoshop.svg" alt="Adobe Photoshop Icon"></li>
                                 <li title="Adobe After Effects"><img src="Icon/Adobe-After-Effects.svg" alt="Adobe After Effects Icon"></li>
                                 <li title="Canva"><img src="Icon/Canva.svg" alt="Canva Icon"></li>
-                                <li title="Miro"><img src="Icon/Miro.svg" alt="Miro Icon"></li>
                         -->
                         <ul class="software-skills-list">
                             <li title="Figma"><img src="Icon/figma-icon.svg" alt="Figma Icon"></li>
@@ -666,47 +497,122 @@
 
 
                 <button type="button" class="active" data-filter="all">All</button>
-                <!--
-                <button type="button" data-filter="Python">Mobile</button>
-                <button type="button" data-filter="Power BI">Web</button>
-                <button type="button" data-filter="Tableau">Tableau</button>
-                <button type="button" data-filter="Excel">Excel</button>
-            </div>
-            <ul class="projects-grid">
-                 <li class="spotlight-card reveal" data-tags="Python, MySQL"><div class="card-content"><img src="images/EV Project image.png" alt="EV Adoption map" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://github.com/niranjan910/U.S._Electric_Vehicle_Adoption_Analysis" target="_blank" class="special-link">U.S. EV Adoption Analysis</a></h3><div class="project-description"><p>Analyzed U.S. EV trends with a CAPSTONE-driven ETL process, leveraging Python and MySQL for clean, actionable results.</p></div><ul class="project-tech-list"><li>Python</li><li>MY SQL</li></ul><div class="project-link-wrapper"><a href="https://github.com/niranjan910/U.S._Electric_Vehicle_Adoption_Analysis" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="Python, JSON" style="--delay: 100ms;"><div class="card-content"><img src="images/Covid 19.png" alt="Covid dashboard" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://github.com/niranjan910/COVID-19_Hospitalization_Rates_Analysis" target="_blank" class="special-link">COVID-19 Hospitalization</a></h3><div class="project-description"><p>Complete COVID-19 hospitalization trends (2019–2025) with real-time insights using Python & JSON.</p></div><ul class="project-tech-list"><li>Python</li><li>JSON</li></ul><div class="project-link-wrapper"><a href="https://github.com/niranjan910/COVID-19_Hospitalization_Rates_Analysis" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="Python, CSV, Seaborn" style="--delay: 200ms;"><div class="card-content"><img src="images/AI Job  image.png" alt="AI Job Market Analysis" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://github.com/niranjan910/AI-Job-Market-Analysis-2025" target="_blank" class="special-link">AI Job Market Analysis</a></h3><div class="project-description"><p>Analyzed real 2025 AI job market data with Python and CSV — actionable insights in real time.</p></div><ul class="project-tech-list"><li>Python</li><li>CSV</li><li>Seaborn</li></ul><div class="project-link-wrapper"><a href="https://github.com/niranjan910/AI-Job-Market-Analysis-2025" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="MySQL, Power BI"><div class="card-content"><img src="images/Lungs cancer.png" alt="AI Lung Diagnostics" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://github.com/niranjan910/AI-Lung-Diagnostics" target="_blank" class="special-link">AI Lung Diagnostics</a></h3><div class="project-description"><p>SQL-driven data mining & interactive Power BI dashboards for lung cancer detection.</p></div><ul class="project-tech-list"><li>MY SQL</li><li>Power BI</li></ul><div class="project-link-wrapper"><a href="https://github.com/niranjan910/AI-Lung-Diagnostics" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="CSV, Power BI" style="--delay: 100ms;"><div class="card-content"><img src="images/Retail.png" alt="UK Retail Analytics" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://github.com/niranjan910/UK_Retail_Analytics" target="_blank" class="special-link">UK Retail Analytics</a></h3><div class="project-description"><p>Power BI dashboard analyzing 500K+ UK retail CSV data for sales trends & customer insights.</p></div><ul class="project-tech-list"><li>Power BI</li><li>CSV</li></ul><div class="project-link-wrapper"><a href="https://github.com/niranjan910/UK_Retail_Analytics" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="Power BI, SQL, Excel" style="--delay: 200ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1606857521015-7f9fcf423740?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Finance Dashboard" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Financial Health Dashboard</a></h3><div class="project-description"><p>A comprehensive dashboard in Power BI for visualizing key financial metrics and trends over time.</p></div><ul class="project-tech-list"><li>Power BI</li><li>Excel</li><li>SQL</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="Tableau, SQL" style="--delay: 300ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1629903673322-257b5f5d3513?auto=format&fit=crop&w=1470&q=80" alt="Sales Dashboard" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Regional Sales Dashboard</a></h3><div class="project-description"><p>Created an interactive Tableau dashboard to analyze sales performance across different regions and product lines.</p></div><ul class="project-tech-list"><li>Tableau</li><li>SQL</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                 <li class="spotlight-card reveal" data-tags="Excel, VBA" style="--delay: 400ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=1470&q=80" alt="Excel Automation" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Inventory Management System</a></h3><div class="project-description"><p>Developed an automated inventory tracking system in Excel using VBA macros to streamline data entry and reporting.</p></div><ul class="project-tech-list"><li>Excel</li><li>VBA</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-            </ul>
+                
 
-        -->
 
-        <button type="button" data-filter="UI">UI Design</button>
+        <button type="button" data-filter="UI, Design">UI Design</button>
                 <button type="button" data-filter="UX">UX Research</button>
                 <button type="button" data-filter="Mobile">Mobile</button>
                 <button type="button" data-filter="Web">Web</button>
             </div>
             <ul class="projects-grid">
-                <li class="spotlight-card reveal" data-tags="UI, Web"><div class="card-content"><img src="images/Project 201.png" alt="Local Artisans Marketplace" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/0etiuVs1x93jiJ35N2zLHn/Artisans-Website-Case-Study?page-id=45%3A3614&node-id=45-3615&p=f&viewport=430%2C141%2C0.27&t=ZdnY49jFiRdjIgYy-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=45%3A3615" target="_blank" class="special-link">Local Artisans Marketplace</a></h3><div class="project-description"><p>Designed a local artisans marketplace website that connects traditional Indian craftsmen with buyers through a clean, user-friendly interface.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Research</li><li>Prototyping</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/0etiuVs1x93jiJ35N2zLHn/Artisans-Website-Case-Study?page-id=45%3A3614&node-id=45-3615&p=f&viewport=430%2C141%2C0.27&t=ZdnY49jFiRdjIgYy-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=45%3A3615" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UX, Mobile" style="--delay: 100ms;"><div class="card-content"><img src="images/Project 101.png" alt="Public Transport QR Recharge Prototype" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/1U5gCR2wsSBPtWuWRdjvZ9/Public-Transport-QR-Recharge-Prototype--Community-?node-id=4-3&t=OF7E9EYcMfW7mobW-1" target="_blank" class="special-link">Public Transport QR Recharge Prototype</a></h3><div class="project-description"><p>Designed a public transport recharge app concept that enables users to scan QR codes for seamless and automatic fare payments.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Testing</li><li>Motion Design</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/1U5gCR2wsSBPtWuWRdjvZ9/Public-Transport-QR-Recharge-Prototype--Community-?node-id=4-3&t=OF7E9EYcMfW7mobW-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UI, Web" style="--delay: 200ms;"><div class="card-content"><img src="images/Project 301.jpg" alt="IRCTC-Re-Design" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/RhmiIl6S2sDL3PsatrJUqr/IRCTC-Re-Design?page-id=55%3A341&node-id=2020-824&p=f&viewport=526%2C407%2C0.18&t=p03ifK2dTUl6Zzmc-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=2020%3A824" target="_blank" class="special-link">IRCTC Website Redesign</a></h3><div class="project-description"><p>Redesigned the official IRCTC (Indian Railway Catering and Tourism Corporation) website to improve usability, visual clarity, and overall user experience.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Journeys</li><li>A/B Testing</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/RhmiIl6S2sDL3PsatrJUqr/IRCTC-Re-Design?page-id=55%3A341&node-id=2020-824&p=f&viewport=526%2C407%2C0.18&t=p03ifK2dTUl6Zzmc-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=2020%3A824" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UX, Mobile"><div class="card-content"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="Travel App" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Travel Companion App</a></h3><div class="project-description"><p>Created an intuitive travel app that simplifies trip planning and enhances the travel experience.</p></div><ul class="project-tech-list"><li>Sketch</li><li>User Interviews</li><li>Prototyping</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>Case Study</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UI, Web" style="--delay: 100ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="SaaS Dashboard" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">SaaS Analytics Dashboard</a></h3><div class="project-description"><p>Designed a comprehensive analytics dashboard that transforms complex data into actionable insights.</p></div><ul class="project-tech-list"><li>Figma</li><li>Design Systems</li><li>Data Visualization</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>Case Study</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UI, Mobile" style="--delay: 200ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="Food Delivery App" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Food Delivery App Redesign</a></h3><div class="project-description"><p>Redesigned a food delivery app to improve order flow and enhance the user experience.</p></div><ul class="project-tech-list"><li>Adobe XD</li><li>User Testing</li><li>UI Animation</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>Case Study</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UX, Web"><div class="card-content"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="Healthcare Portal" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Healthcare Patient Portal</a></h3><div class="project-description"><p>Designed a patient portal that enhances communication between patients and healthcare providers.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Research</li><li>Prototyping</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>Case Study</span><span class="arrow-icon">→</span></a></div></div></div></li>
-                <li class="spotlight-card reveal" data-tags="UI, Mobile" style="--delay: 100ms;"><div class="card-content"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="Social Media App" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Social Media App</a></h3><div class="project-description"><p>Designed a social media app that focuses on user engagement and community building.</p></div><ul class="project-tech-list"><li>Sketch</li><li>User Testing</li><li>UI Animation</li></ul><div class="project-link-wrapper"><a href="#" class="project-view-link" target="_blank"><span>Case Study</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, UX, Web"><div class="card-content"><img src="images/Project 202.png" alt="Local Artisans Marketplace" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/design/U6NV6uZX14Smyh7NtwXgIf/Artisans-Website-2.0V?node-id=0-1&t=4R5OV4qccMsMlMbK-1" target="_blank" class="special-link">Local Artisans Marketplace</a></h3><div class="project-description"><p>Designed a local artisans marketplace website that connects traditional Indian craftsmen with buyers through a clean, user-friendly interface.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Research</li><li>Prototyping</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/design/U6NV6uZX14Smyh7NtwXgIf/Artisans-Website-2.0V?node-id=0-1&t=4R5OV4qccMsMlMbK-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, UX, Mobile" style="--delay: 100ms;"><div class="card-content"><img src="images/Project 101.png" alt="Public Transport QR Recharge Prototype" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/1U5gCR2wsSBPtWuWRdjvZ9/Public-Transport-QR-Recharge-Prototype--Community-?node-id=4-3&t=OF7E9EYcMfW7mobW-1" target="_blank" class="special-link">Public Transport QR Recharge Prototype</a></h3><div class="project-description"><p>Designed a public transport recharge app concept that enables users to scan QR codes for seamless and automatic fare payments.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Testing</li><li>Motion Design</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/1U5gCR2wsSBPtWuWRdjvZ9/Public-Transport-QR-Recharge-Prototype--Community-?node-id=4-3&t=OF7E9EYcMfW7mobW-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, UX, Web" style="--delay: 200ms;"><div class="card-content"><img src="images/Project 301.jpg" alt="IRCTC-Re-Design" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/RhmiIl6S2sDL3PsatrJUqr/IRCTC-Re-Design?page-id=55%3A341&node-id=2020-824&p=f&viewport=526%2C407%2C0.18&t=p03ifK2dTUl6Zzmc-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=2020%3A824" target="_blank" class="special-link">IRCTC Website Redesign</a></h3><div class="project-description"><p>Redesigned the official IRCTC (Indian Railway Catering and Tourism Corporation) website to improve usability, visual clarity, and overall user experience.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Journeys</li><li>A/B Testing</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/RhmiIl6S2sDL3PsatrJUqr/IRCTC-Re-Design?page-id=55%3A341&node-id=2020-824&p=f&viewport=526%2C407%2C0.18&t=p03ifK2dTUl6Zzmc-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=2020%3A824" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, Design"><div class="card-content"><img src="images/Project 401.png" alt="Visual UI Exploration — Glassmorphism Design" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="#" target="_blank" class="special-link">Visual UI Exploration — Glassmorphism Design</a></h3><div class="project-description"><p>Designed a modern glassmorphism-based interface that blends visual elegance with functional clarity to elevate user experience.</p></div><ul class="project-tech-list"><li>Visual Design</li><li>Glassmorphism</li><li>Futuristic UI</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/design/4gpPwVvzwtDOqxBqLJ9YpP/Glassmorphism-Designs?node-id=10-5174&t=GO8VClkQrOc8Bh3l-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, Web" style="--delay: 100ms;"><div class="card-content"><img src="images/Project 501.jpg" alt="Web App - Preventive Maintenance Company" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/design/pXz9EsVvjUWoo2Ezz5LHVU/Webapp---Preventive-Maintenance-Company?node-id=46-8020&t=tbB5jAKrXT5gKDtT-1" target="_blank" class="special-link">SaaS Analytics Dashboard</a></h3><div class="project-description"><p>Designed a comprehensive analytics dashboard that transforms complex data into actionable insights.</p></div><ul class="project-tech-list"><li>Figma</li><li>Design Systems</li><li>Data Visualization</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/design/pXz9EsVvjUWoo2Ezz5LHVU/Webapp---Preventive-Maintenance-Company?node-id=46-8020&t=tbB5jAKrXT5gKDtT-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, Design, Web" style="--delay: 200ms;"><div class="card-content"><img src="images/Project 601.png" alt="Parallex Effect Game Website" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/design/U14IZDOTuFpXlWt7z3Jwwc/Parallex-Effect-Game-Website?node-id=0-1&t=tZVdUgwohcnXzfKl-1" target="_blank" class="special-link">Parallex Effect Game Website</a></h3><div class="project-description"><p>Designed an immersive game landing page with parallax scrolling to create a dynamic, layered experience that captivates users and boosts engagement.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Testing</li><li>UI Animation</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/design/U14IZDOTuFpXlWt7z3Jwwc/Parallex-Effect-Game-Website?node-id=0-1&t=tZVdUgwohcnXzfKl-1" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UX, Mobile"><div class="card-content"><img src="images/Project701.png" alt="Next-Gen AI Voice Assistant UI" class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/99uTlhVgvECFrOJr4KssXj/Voice-Assistance?page-id=0%3A1&node-id=70-130&viewport=1561%2C-3039%2C0.98&t=6u0v0dIF7r57wSGJ-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=16%3A100" target="_blank" class="special-link">Next-Gen AI Voice Assistant UI</a></h3><div class="project-description"><p>This design focuses on voice interaction, offering a visually appealing and smooth interface for smart assistants that respond to voice commands.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Research</li><li>Prototyping</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/99uTlhVgvECFrOJr4KssXj/Voice-Assistance?page-id=0%3A1&node-id=70-130&viewport=1561%2C-3039%2C0.98&t=6u0v0dIF7r57wSGJ-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=16%3A100" class="project-view-link" target="_blank"><span>View Project</span><span class="arrow-icon">→</span></a></div></div></div></li>
+                <li class="spotlight-card reveal" data-tags="UI, Mobile" style="--delay: 100ms;"><div class="card-content"><img src="images/Project 801.png" alt="Dating App Onboarding Screen " class="project-image"><div class="card-inner"><h3 class="project-title"><a href="https://www.figma.com/proto/kSJo9xHK2beJz9t7F0fUBw/Onboarding-Process?page-id=60%3A1129&node-id=60-1681&p=f&viewport=21%2C236%2C0.21&t=HBNaxQCbs9EiqHG3-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=60%3A1681" target="_blank" class="special-link">Dating App Onboarding Screen </a></h3><div class="project-description"><p>Designed a friendly and minimal onboarding experience for a dating app that builds trust and encourages meaningful user engagement from the first tap.</p></div><ul class="project-tech-list"><li>Figma</li><li>User Testing</li><li>UI Animation</li></ul><div class="project-link-wrapper"><a href="https://www.figma.com/proto/kSJo9xHK2beJz9t7F0fUBw/Onboarding-Process?page-id=60%3A1129&node-id=60-1681&p=f&viewport=21%2C236%2C0.21&t=HBNaxQCbs9EiqHG3-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=60%3A1681" class="project-view-link" target="_blank"><span>View project</span><span class="arrow-icon">→</span></a></div></div></div></li>
             </ul>
              <div class="projects-footer reveal">
                 <a href="https://www.figma.com/@RaiShivu " class="btn btn-large" target="_blank"><span class="special-link">View All on Figma</span></a>
             </div>
         </section>
+
+<section id="case" class="reveal">
+            <h2 class="section-heading">Case Studies</h2>
+  
+  <div class="case-studies-container">
+    <!-- Top Row -->
+    <div class="case-studies-row">
+      <div class="case-study-card reveal">
+        <div class="case-study-content">
+          <div class="case-study-image">
+            <img src="images/Project 201.png" alt="Case Study 1">
+          </div>
+          <div class="case-study-details">
+            <h3>Local Artisans Website Case Study</h3>
+            <p class="case-study-description">Celebrating traditional Indian craftsmanship through modern UX.</p>
+            <div class="case-study-tags">
+              <span>UI/UX</span>
+              <span>Web Design</span>
+              <span>Research</span>
+            </div>
+            <a href="https://www.behance.net/gallery/229729503/A-Local-Artisans-Marketplace-UIUX-Case-Study" target="_blank" class="btn case-study-link">View Case Study</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="case-study-card reveal">
+        <div class="case-study-content">
+          <div class="case-study-image">
+            <img src="images/Case Study 2.png" alt="Case Study 2">
+          </div>
+          <div class="case-study-details">
+            <h3>IRCTC Website Redesign Case Study</h3>
+            <p class="case-study-description">Brief description of the case study and the challenges addressed...</p>
+            <div class="case-study-tags">
+              <span>Website</span>
+              <span>User Testing</span>
+              <span>Prototyping</span>
+            </div>
+            <a href="https://www.behance.net/gallery/230112253/IRCTC-Website-Redesign-Case-Study" target="_blank" class="btn case-study-link">View Case Study</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 
+    <div class="case-studies-row">
+      <div class="case-study-card reveal">
+        <div class="case-study-content">
+          <div class="case-study-image">
+            <img src="path-to-your-image-3.jpg" alt="Case Study 3">
+          </div>
+          <div class="case-study-details">
+            <h3>Project Title 3</h3>
+            <p class="case-study-description">Brief description of the case study and the challenges addressed...</p>
+            <div class="case-study-tags">
+              <span>Branding</span>
+              <span>Visual Design</span>
+              <span>Strategy</span>
+            </div>
+            <a href="case-study-3-link" class="btn case-study-link">View Case Study</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="case-study-card reveal">
+        <div class="case-study-content">
+          <div class="case-study-image">
+            <img src="path-to-your-image-4.jpg" alt="Case Study 4">
+          </div>
+          <div class="case-study-details">
+            <h3>Project Title 4</h3>
+            <p class="case-study-description">Brief description of the case study and the challenges addressed...</p>
+            <div class="case-study-tags">
+              <span>Product Design</span>
+              <span>Development</span>
+              <span>Analytics</span>
+            </div>
+            <a href="case-study-4-link" class="btn case-study-link">View Case Study</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+                
+
+            <div class="projects-footer reveal">
+                <a href="https://www.linkedin.com/in/shivamrai45/" class="btn btn-large" target="_blank"><span class="special-link">View All on LinkedIn</span></a>
+            </div>
         
+
+    -->  
+     </section>   
         <section id="certs" class="reveal">
-            <h2 class="section-heading">Credentials</h2>
+            <h2 class="section-heading">Certificates</h2>
             <ul class="certs-grid">
                 <li class="spotlight-card reveal">
                     <div class="card-content">
@@ -796,10 +702,8 @@
             <div class="projects-footer reveal">
                 <a href="https://www.linkedin.com/in/shivamrai45/" class="btn btn-large" target="_blank"><span class="special-link">View All on LinkedIn</span></a>
             </div>
-
         </section>
 
-        </section>
 
         <section id="contact" class="reveal">
             <h2 class="title">Get In Touch</h2>
