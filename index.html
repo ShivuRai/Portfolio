@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shivam Rai | UI/UX Designer Portfolio</title>
-    
+    <link rel="icon" type="image/png" href="Icon/Logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -395,6 +395,18 @@ ul.core-skills-list li::before { content: "▹"; position: absolute; left: 0; co
   }
 }
 
+.nav-logo-img {
+  height: 80px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 5px var(--accent));
+  transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+  transform: scale(1.05);
+}
+
 
     </style>
 </head>
@@ -403,7 +415,12 @@ ul.core-skills-list li::before { content: "▹"; position: absolute; left: 0; co
     <a href="#main-content" class="skip-to-content">Skip to Content</a>
     
     <nav class="main-nav" id="mainNav">
-        <div class="nav-logo reveal"><a href="#">Welcome ❤️</a></div>
+       <!-- <div class="nav-logo reveal"><a href="#">Welcome ❤️</a></div> -->
+        <div class="nav-logo">
+    <a href="#">
+      <img src="Icon/Logo.png" alt="SR Logo" class="nav-logo-img">
+    </a>
+  </div>
         <button class="hamburger-menu" id="hamburgerMenu" aria-label="Open Menu">
             <div class="bar"></div><div class="bar"></div><div class="bar"></div>
         </button>
